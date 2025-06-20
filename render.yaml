@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: future-ai-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+    # Add your other environment variables in the Render dashboard
+    plan: free
+    autoDeploy: true
+
+  - type: web
+    name: future-ai-frontend
+    env: static
+    buildCommand: cd ../client && npm install && npm run build
+    staticPublishPath: "./client/build"
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://future-ai-backend.onrender.com
+    plan: free
+    autoDeploy: true

@@ -224,6 +224,15 @@ app.post('/api/generate-image', async (req, res) => {
   }
 });
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    status: 'running',
+    message: 'Future AI API Server is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // ✅ Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

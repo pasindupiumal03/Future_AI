@@ -5,15 +5,15 @@ services:
     rootDirectory: server
     buildCommand: |
       npm install -g npm@latest
-      npm install
-    startCommand: chmod +x ./start.sh && ./start.sh
+      npm ci
+    startCommand: node --no-warnings index.js
     envVars:
       - key: PORT
         value: 10000
       - key: NODE_ENV
         value: production
       - key: NODE_VERSION
-        value: 18.x
+        value: 20.x
       - key: OPENAI_API_KEY
         fromService:
           name: future-ai-backend
@@ -25,5 +25,6 @@ services:
       #     name: future-ai-backend
       #     type: env
       #     key: STABILITY_API_KEY
+    healthCheckPath: /
     plan: free
     region: oregon

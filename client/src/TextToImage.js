@@ -62,6 +62,8 @@ const TextToImage = () => {
 
   return (
     <div className="text-to-image-container">
+      <StarBackground />
+      <NebulaOverlay />
       <header className="header">
         <div className="logo" style={{cursor: 'pointer'}} onClick={() => navigate('/')}>futureAI</div>
         <nav className="nav-icons">

@@ -83,19 +83,41 @@ const VideoGen = () => {
   };
 
   const handleGenerateVideo = async () => {
+    if (!image) {
+      setError('Please upload an image first');
+      return;
+    }
+
+    setLoading(true);
+    setStatus('Generating video...');
+    setError('');
+
     try {
+      const formData = new FormData();
+      formData.append('image', image);
+      
+      if (prompt) {
+        formData.append('prompt', prompt);
+      }
+
       const res = await fetch(`${API_BASE_URL}/api/generate-video`, {
         method: 'POST',
         body: formData,
       });
+
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || 'Failed to generate video');
       }
+
       const data = await res.json();
       if (data.videoUrl) {
         setVideoUrl(data.videoUrl);
+      } else if (data.video) {
+        // Handle base64 video data if needed
+        setVideoUrl(`data:video/mp4;base64,${data.video}`);
       }
+      
       setStatus('Video generated successfully!');
     } catch (err) {
       setError(err.message || 'Error generating video');

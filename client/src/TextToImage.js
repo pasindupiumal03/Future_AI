@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from './config';
+import StarBackground from './StarBackground';
+import NebulaOverlay from './NebulaOverlay';
 import './TextToImage.css';
 
 const TextToImage = () => {

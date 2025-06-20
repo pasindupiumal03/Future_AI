@@ -1,0 +1,29 @@
+# Ensure consistent line endings
+* text=auto eol=lf
+
+# Shell scripts should have LF line endings
+*.sh text eol=lf
+
+# Windows-specific files should have CRLF line endings
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files should not be modified
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tar binary
+*.mp4 binary
+*.webm binary
+*.wav binary
+*.mp3 binary
+*.ogg binary
+*.eot binary
+*.ttf binary
+*.woff binary
+*.woff2 binary

@@ -1,0 +1,43 @@
+# Dependency directories
+node_modules/
+*/node_modules/
+
+# Build outputs
+build/
+dist/
+.next/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local development
+.DS_Store
+.vercel
+
+# Server files (if not needed for the frontend)
+server/
+
+# Git
+.git/
+.gitignore
+
+# IDE specific files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Testing
+coverage/
+*.test.js
+
+# Misc
+*.log
+.cache/

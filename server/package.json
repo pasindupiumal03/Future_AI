@@ -1,24 +1,31 @@
 {
   "name": "future-ai",
   "version": "1.0.0",
-  "description": "",
+  "description": "AI-powered image and video generation service",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["ai", "image-generation", "video-generation", "openai"],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "dependencies": {
-    "axios": "^1.9.0",
+    "axios": "^1.6.2",
     "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "form-data": "^4.0.2",
-    "mongoose": "^8.15.0",
-    "multer": "^2.0.0",
-    "openai": "^5.5.1",
-    "sharp": "^0.34.2"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "form-data": "^4.0.0",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.24.1",
+    "sharp": "^0.32.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

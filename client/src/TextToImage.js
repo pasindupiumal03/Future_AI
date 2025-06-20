@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from './config';
 import './TextToImage.css';
 
 const TextToImage = () => {
@@ -22,7 +23,7 @@ const TextToImage = () => {
     setGeneratedImage(null);
 
     try {
-      const response = await fetch('http://localhost:5000/api/generate-image', {
+      const response = await fetch(`${API_BASE_URL}/api/generate-image`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

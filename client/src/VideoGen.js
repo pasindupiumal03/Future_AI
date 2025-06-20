@@ -3,6 +3,7 @@ import './App.css';
 import { useNavigate } from 'react-router-dom';
 import StarBackground from './StarBackground';
 import NebulaOverlay from './NebulaOverlay';
+import { API_BASE_URL } from './config';
 
 const VideoGen = () => {
   const [image, setImage] = useState(null);
@@ -57,7 +58,7 @@ const VideoGen = () => {
     setImage(null);
 
     try {
-      const response = await fetch('http://localhost:5000/api/generate-image', {
+      const response = await fetch(`${API_BASE_URL}/api/generate-image`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +84,7 @@ const VideoGen = () => {
 
   const handleGenerateVideo = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/generate-video', {
+      const res = await fetch(`${API_BASE_URL}/api/generate-video`, {
         method: 'POST',
         body: formData,
       });
@@ -110,7 +111,7 @@ const VideoGen = () => {
     try {
       const formData = new FormData();
       formData.append('image', image);
-      const res = await fetch('http://localhost:5000/api/scan-image', {
+      const res = await fetch(`${API_BASE_URL}/api/scan-image`, {
         method: 'POST',
         body: formData,
       });

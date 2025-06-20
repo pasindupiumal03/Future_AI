@@ -1,20 +1,15 @@
 {
-  "name": "future-ai-server",
+  "name": "future-ai",
   "version": "1.0.0",
-  "description": "Backend server for Future AI application",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "keywords": ["ai", "openai", "stability-ai", "node", "express"],
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "engines": {
-    "node": ">=14.0.0"
-  },
   "dependencies": {
     "axios": "^1.9.0",
     "cors": "^2.8.5",
@@ -25,8 +20,5 @@
     "multer": "^2.0.0",
     "openai": "^5.5.1",
     "sharp": "^0.34.2"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
   }
 }

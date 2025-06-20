@@ -3,13 +3,17 @@ services:
     name: future-ai-backend
     env: node
     rootDirectory: server
-    buildCommand: npm install
-    startCommand: node index.js
+    buildCommand: |
+      npm install -g npm@latest
+      npm install
+    startCommand: chmod +x ./start.sh && ./start.sh
     envVars:
       - key: PORT
         value: 10000
       - key: NODE_ENV
         value: production
+      - key: NODE_VERSION
+        value: 18.x
       - key: OPENAI_API_KEY
         fromService:
           name: future-ai-backend

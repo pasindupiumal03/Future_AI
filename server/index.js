@@ -11,33 +11,15 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://*.vercel.app',
-  'https://future-ai-three.vercel.app',
-  'https://future-kuog1zw46-pasipium03-gmailcoms-projects.vercel.app',
-  'https://future-ai-frontend.vercel.app'
-];
-
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
+  origin: [
+    'http://localhost:3000',
+    'https://*.vercel.app',
+    'https://future-ai-frontend.vercel.app'
+  ],
   optionsSuccessStatus: 200
 };
 
-// Enable pre-flight across-the-board
-app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
 app.use(express.json());
 
@@ -222,15 +204,6 @@ app.post('/api/generate-image', async (req, res) => {
     console.error('Error generating image:', error);
     res.status(500).json({ error: 'Failed to generate image', details: error.message });
   }
-});
-
-// Root route
-app.get('/', (req, res) => {
-  res.json({
-    status: 'running',
-    message: 'Future AI API Server is running',
-    timestamp: new Date().toISOString()
-  });
 });
 
 // ✅ Start server

@@ -2,6 +2,7 @@ services:
   - type: web
     name: future-ai-backend
     env: node
+    rootDirectory: server
     buildCommand: npm install
     startCommand: npm start
     envVars:

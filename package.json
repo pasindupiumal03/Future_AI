@@ -10,7 +10,8 @@
     "start": "cd client && npm start",
     "build": "cd client && npm run build",
     "test": "cd client && npm test",
-    "eject": "cd client && npm run eject"
+    "eject": "cd client && npm run eject",
+    "vercel-build": "cd client && npm install && npm run build"
   },
   "engines": {
     "node": ">=16.0.0"

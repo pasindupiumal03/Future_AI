@@ -1,0 +1,10 @@
+node_modules
+.git
+.gitignore
+server
+render.yaml
+vercel-build.js
+now.json
+*.md
+.DS_Store
+.env*

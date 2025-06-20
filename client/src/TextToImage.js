@@ -27,7 +27,10 @@ const TextToImage = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
+        credentials: 'include',
+        mode: 'cors',
         body: JSON.stringify({ prompt }),
       });
 

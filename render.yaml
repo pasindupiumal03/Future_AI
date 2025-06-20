@@ -15,10 +15,11 @@ services:
           name: future-ai-backend
           type: env
           key: OPENAI_API_KEY
-      - key: STABILITY_API_KEY
-        fromService:
-          name: future-ai-backend
-          type: env
-          key: STABILITY_API_KEY
+      # STABILITY_API_KEY is optional - uncomment and add if you want to enable video generation
+      # - key: STABILITY_API_KEY
+      #   fromService:
+      #     name: future-ai-backend
+      #     type: env
+      #     key: STABILITY_API_KEY
     plan: free
     region: oregon

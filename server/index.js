@@ -36,12 +36,20 @@ const upload = multer();
 // API Keys from environment variables
 const STABILITY_API_KEY = process.env.STABILITY_API_KEY;
 if (!STABILITY_API_KEY) {
-  console.error('Error: STABILITY_API_KEY is not defined in environment variables');
-  process.exit(1);
+  console.warn('Warning: STABILITY_API_KEY is not defined. Video generation features will be disabled.');
 }
 
 // ✅ Generate video from prompt using Stability.ai
 app.post('/api/generate-video', upload.single('image'), async (req, res) => {
+  if (!STABILITY_API_KEY) {
+    return res.status(501).json({ 
+      error: 'Video generation is not enabled. STABILITY_API_KEY is required for this feature.' 
+    });
+  }
+  
+  if (!req.file) {
+    return res.status(400).json({ error: 'No image file provided' });
+  }
   try {
     // Resize image to 1024x576 if not already a supported size
     let imageBuffer = req.file.buffer;

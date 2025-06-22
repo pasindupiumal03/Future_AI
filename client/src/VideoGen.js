@@ -157,7 +157,9 @@ const VideoGen = () => {
       <NebulaOverlay />
       <header className="header">
         <div className="logo" style={{cursor: 'pointer'}} onClick={() => navigate('/')}>futureAI</div>
-        <nav className="nav-icons">{/* Placeholder for icons */}</nav>
+        <nav className="nav-icons">
+          <button className="back-button" onClick={() => navigate('/')}>← Back to Home</button>
+        </nav>
       </header>
       <main className="main-content">
         <div className="card-ui">

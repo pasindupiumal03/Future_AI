@@ -16,6 +16,7 @@ const TextToImage = () => {
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [history, setHistory] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
   const navigate = useNavigate();
 
   // Advanced options state
@@ -400,16 +401,14 @@ const TextToImage = () => {
                           src={generatedImage} 
                           alt="Generated content" 
                           className="generated-image"
+                          onLoad={() => setIsImageLoaded(true)}
                         />
-                      </div>
-                      <div className="image-actions">
-                        <button 
-                          className="action-btn download-btn"
-                          onClick={() => handleDownload()}
-                          disabled={loading}
-                        >
-                          <FiDownload /> Download Image
-                        </button>
+                        {!isImageLoaded && (
+                          <div className="loading-overlay">
+                            <div className="spinner"></div>
+                            <p>Loading image...</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -417,9 +416,22 @@ const TextToImage = () => {
                       <FiImage size={48} className="placeholder-icon" />
                       <p>Your generated image will appear here</p>
                       <p className="small">Enter a prompt and click "Generate Image"</p>
-                      {isDragging && <div className="drag-overlay">Drop image here to upload</div>}
                     </div>
                   )}
+                  
+                  {generatedImage && (
+                    <div className="image-actions">
+                      <button 
+                        className="action-btn download-btn"
+                        onClick={() => handleDownload()}
+                        disabled={loading}
+                      >
+                        <FiDownload className="icon" /> Download Image
+                      </button>
+                    </div>
+                  )}
+                  
+                  {isDragging && <div className="drag-overlay">Drop image here to upload</div>}
                   
                   {loading && (
                     <div className="loading-overlay">

@@ -206,6 +206,58 @@ app.post('/api/generate-image', async (req, res) => {
   }
 });
 
+// Generate AI Image with DALL-E
+app.post('/api/generate-image', async (req, res) => {
+  try {
+    const { prompt, style, quality, aspect_ratio } = req.body;
+
+    if (!prompt) {
+      return res.status(400).json({ error: 'Prompt is required' });
+    }
+
+    // Map aspect ratio to DALL-E compatible size
+    const getSize = (ratio) => {
+      switch (ratio) {
+        case '16:9': return '1024x1024'; // DALL-E 3 doesn't support 16:9, using square as fallback
+        case '1:1': return '1024x1024';
+        case '9:16': return '1024x1024'; // DALL-E 3 doesn't support 9:16, using square as fallback
+        default: return '1024x1024';
+      }
+    };
+
+    // Map quality to DALL-E quality parameter
+    const getQuality = (quality) => {
+      return quality === 'high' ? 'hd' : 'standard';
+    };
+
+    const response = await axios.post(
+      'https://api.openai.com/v1/images/generations',
+      {
+        model: 'dall-e-3',
+        prompt: `${style ? style + ' style: ' : ''}${prompt}. ${quality ? 'High quality, detailed, ' + quality + ' quality. ' : ''}`,
+        n: 1,
+        size: getSize(aspect_ratio),
+        quality: getQuality(quality),
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const imageUrl = response.data.data[0].url;
+    res.json({ imageUrl });
+  } catch (error) {
+    console.error('Error generating image:', error.response?.data || error.message);
+    res.status(500).json({ 
+      error: 'Failed to generate image',
+      details: error.response?.data?.error?.message || error.message 
+    });
+  }
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Server error:', err);

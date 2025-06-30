@@ -12,14 +12,14 @@ function Home() {
   const feedbacks = [
     {
       id: 1,
-      quote: "FutureAI has completely transformed how we create content. The AI-generated videos save us countless hours of production time while delivering stunning results.",
+      quote: "MotionAI has completely transformed how we create content. The AI-generated videos save us countless hours of production time while delivering stunning results.",
       name: "Alex Johnson",
       role: "Creative Director @DigitalDreams",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80"
     },
     {
       id: 2,
-      quote: "As a small business owner, I was amazed by how easy it is to create professional-looking videos with FutureAI. The quality is outstanding and the interface is incredibly intuitive.",
+      quote: "As a small business owner, I was amazed by how easy it is to create professional-looking videos with MotionAI. The quality is outstanding and the interface is incredibly intuitive.",
       name: "Sarah Williams",
       role: "Founder @StartupVentures",
       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&auto=format&fit=crop&q=80"
@@ -33,7 +33,7 @@ function Home() {
     },
     {
       id: 4,
-      quote: "FutureAI's technology is lightyears ahead of anything else we've tried. The ability to generate high-quality videos from simple text prompts is nothing short of magical.",
+      quote: "MotionAI's technology is lightyears ahead of anything else we've tried. The ability to generate high-quality videos from simple text prompts is nothing short of magical.",
       name: "Emily Rodriguez",
       role: "Content Creator @CreativeMinds",
       avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80"
@@ -47,7 +47,7 @@ function Home() {
     },
     {
       id: 6,
-      quote: "FutureAI's intuitive interface makes it easy for our entire team to create professional-grade content without a steep learning curve.",
+      quote: "MotionAI's intuitive interface makes it easy for our entire team to create professional-grade content without a steep learning curve.",
       name: "Michelle Zhang",
       role: "Design Lead @NextGenStudios",
       avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80"
@@ -61,7 +61,7 @@ function Home() {
     },
     {
       id: 8,
-      quote: "FutureAI has become an essential tool in our creative workflow. The ability to quickly iterate on ideas has been a game-changer.",
+      quote: "MotionAI has become an essential tool in our creative workflow. The ability to quickly iterate on ideas has been a game-changer.",
       name: "Sophia Chen",
       role: "Art Director @DigitalDreamWorks",
       avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&auto=format&fit=crop&q=80"
@@ -75,7 +75,7 @@ function Home() {
       <StarBackground />
       <SplashCursor />
       <header className="header">
-        <a href="#" className="logo">futureAI</a>
+        <a href="#" className="logo">motionAI</a>
         <nav className="nav-icons">
           <a 
             href="https://pump.fun" 
@@ -84,13 +84,13 @@ function Home() {
             className="token-btn"
           >
             <MdToken className="token-icon" />
-            <span>$FAI Is Live</span>
+            <span>$MAI Is Live</span>
             <span className="arrow">›</span>
           </a>
         </nav>
       </header>
       <main className="main-content">
-        <h1 className="main-title">the future of ai</h1>
+        <h1 className="main-title">the motion of ai</h1>
         <p className="subtitle">Our cutting-edge platform uses state-of-the-art AI algorithms to bring images to life.</p>
         <div className="cta-buttons">
           <button className="try-now" onClick={() => navigate('/generate')}>Generate from Image</button>
@@ -99,7 +99,7 @@ function Home() {
         
         {/* Creators Feedbacks Section */}
         <section className="feedback-section">
-          <h2>Creators Love FutureAI</h2>
+          <h2>Creators Love MotionAI</h2>
           <div className="feedback-container">
             <div className="feedback-track">
               {[...Array(5)].map((_, i) => (

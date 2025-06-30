@@ -187,7 +187,7 @@ const TextToImage = () => {
       <StarBackground />
       <NebulaOverlay />
       <header className="header">
-        <div className="logo" onClick={() => navigate('/')}>futureAI</div>
+        <div className="logo" onClick={() => navigate('/')}>motionAI</div>
         <nav className="nav-icons">
           <button className="back-button" onClick={() => navigate('/')}>
             ← Back to Home

@@ -402,6 +402,8 @@ body, html, #root, .star-bg {
   max-width: 1400px;
   margin: 0 auto;
   animation: fadeInDown 0.8s ease-out forwards;
+  background: transparent;
+  box-shadow: none;
 }
 
 @keyframes fadeInDown {

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import StarBackground from './StarBackground';
 import NebulaOverlay from './NebulaOverlay';
 import { API_BASE_URL } from './config';
-import { FiImage, FiUpload, FiX, FiCopy, FiDownload, FiRefreshCw, FiZap, FiLoader } from 'react-icons/fi';
+import { FiImage, FiUpload, FiX, FiCopy, FiDownload, FiRefreshCw, FiZap, FiLoader, FiVideo } from 'react-icons/fi';
 import './VideoGen.css';
 
 const VideoGen = () => {
@@ -15,6 +15,9 @@ const VideoGen = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
+  const [videoError, setVideoError] = useState('');
+  const [showVideoError, setShowVideoError] = useState(false);
   const [advancedOptions, setAdvancedOptions] = useState({
     style: 'realistic',
     quality: 'standard',
@@ -201,6 +204,31 @@ const VideoGen = () => {
     await analyzeImage();
   };
 
+  // Handle video generation
+  const handleGenerateVideo = () => {
+    if (!image) {
+      setVideoError('Please scan an image first');
+      setShowVideoError(true);
+      setTimeout(() => setShowVideoError(false), 3000);
+      return;
+    }
+
+    setIsGeneratingVideo(true);
+    setVideoError('');
+    setShowVideoError(false);
+
+    // Simulate video generation with buffering
+    const timeout = setTimeout(() => {
+      setIsGeneratingVideo(false);
+      setVideoError('Too many requests. Please try again later.');
+      setShowVideoError(true);
+      setTimeout(() => setShowVideoError(false), 5000);
+    }, 5000); // Show error after 5 seconds
+
+    // Cleanup timeout on component unmount
+    return () => clearTimeout(timeout);
+  };
+
   // Copy prompt to clipboard
   const copyToClipboard = () => {
     if (!prompt) return;
@@ -227,46 +255,57 @@ const VideoGen = () => {
       <NebulaOverlay />
       <header className="header">
         <div className="logo" onClick={() => navigate('/')}>motionAI</div>
-        <nav className="nav-icons">
-          <button 
-            className="back-button" 
-            onClick={() => navigate('/')}
-            disabled={loading || isGenerating}
-          >
-            ← Back to Home
-          </button>
-        </nav>
+        <button 
+          className="back-button" 
+          onClick={() => navigate('/')}
+          disabled={loading || isGenerating}
+        >
+          ← Back to Home
+        </button>
       </header>
       
       <main className="main-content">
-        <div className="upload-result-container">
-          {/* Left Column - Upload Section */}
-          <div className="upload-section">
+        <h1 className="page-title">Image to AI Art</h1>
+        <p className="page-subtitle">Transform your images with the power of AI</p>
+        
+        <div className="app-container">
+          {/* Left Panel - Upload & Controls */}
+          <div className="upload-panel">
             <div className="card-ui">
-              <h2 className="card-title">
-                <FiImage className="icon" /> Image to AI Art
-                <span className="info-tooltip" title="Upload an image to transform it with AI">ⓘ</span>
-              </h2>
-              
               <div className="card-content">
                 <div className="input-container">
                   <div 
-                    className={`drop-area ${loading || isGenerating ? 'disabled' : ''}`} 
+                    className={`drop-area ${loading || isGenerating ? 'disabled' : ''} ${isDragging ? 'drag-active' : ''}`} 
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onClick={() => !image && document.getElementById('image-upload')?.click()}
                   >
                     {imagePreview ? (
-                      <img 
-                        src={imagePreview} 
-                        alt="Preview" 
-                        className="preview-image"
-                      />
+                      <div className="image-preview-container">
+                        <img 
+                          src={imagePreview} 
+                          alt="Preview" 
+                          className="preview-image"
+                        />
+                        <button 
+                          className="remove-image-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setImage(null);
+                            setImagePreview(null);
+                            setPrompt('');
+                            setGeneratedImage(null);
+                          }}
+                          disabled={loading || isGenerating}
+                        >
+                          <FiX />
+                        </button>
+                      </div>
                     ) : (
                       <div className="upload-placeholder">
-                        <FiUpload size={48} className="upload-icon" />
-                        <p>Drag & drop an image here, or click to select</p>
+                        <FiUpload size={40} className="upload-icon" />
+                        <p>Drag & drop an image or click to browse</p>
                         <p className="small">Supports JPG, PNG, WEBP (Max 5MB)</p>
                       </div>
                     )}
@@ -278,38 +317,54 @@ const VideoGen = () => {
                       className="file-input"
                       disabled={loading || isGenerating}
                     />
-                    {image && (
-                      <button 
-                        className="remove-image-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setImage(null);
-                          setImagePreview(null);
-                          setPrompt('');
-                          setGeneratedImage(null);
-                        }}
-                        disabled={loading || isGenerating}
-                      >
-                        <FiX />
-                      </button>
-                    )}
-                    <div className="overlay-text">
-                      <FiUpload size={32} />
-                      <p>Drop image here</p>
-                    </div>
                   </div>
                 </div>
 
-                {/* Advanced Options */}
-                <div className="advanced-options">
-                  <h4>Advanced Options</h4>
-                  <div className="advanced-options-grid">
+                <div className="controls-section">
+                  <div className="prompt-editor">
+                    <div className="editor-header">
+                      <span>AI Prompt</span>
+                      <div className="editor-actions">
+                        <button 
+                          className="icon-button" 
+                          onClick={copyToClipboard}
+                          disabled={!prompt || loading || isGenerating}
+                          title="Copy to clipboard"
+                        >
+                          <FiCopy size={18} />
+                        </button>
+                        <button 
+                          className="regenerate-btn"
+                          onClick={handleAnalyzeClick}
+                          disabled={!image || loading || isGenerating}
+                          title={prompt ? 'Regenerate prompt' : 'Generate prompt'}
+                        >
+                          <FiRefreshCw size={16} className={loading ? 'spinning' : ''} />
+                          {prompt ? 'Regenerate' : 'Generate'}
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="prompt-textarea-container">
+                      <textarea
+                        ref={promptRef}
+                        value={prompt}
+                        onChange={handlePromptChange}
+                        placeholder="AI will generate a prompt based on your image..."
+                        className="prompt-textarea"
+                        disabled={loading || isGenerating}
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="advanced-options">
                     <div className="option-group">
-                      <label htmlFor="style">Style</label>
+                      <label>Style</label>
                       <select 
-                        id="style" 
                         value={advancedOptions.style}
                         onChange={(e) => handleOptionChange('style', e.target.value)}
+                        disabled={loading || isGenerating}
                       >
                         <option value="">Default</option>
                         <option value="realistic">Realistic</option>
@@ -319,72 +374,33 @@ const VideoGen = () => {
                         <option value="anime">Anime</option>
                       </select>
                     </div>
+                    
                     <div className="option-group">
-                      <label htmlFor="quality">Quality</label>
+                      <label>Quality</label>
                       <select 
-                        id="quality" 
                         value={advancedOptions.quality}
                         onChange={(e) => handleOptionChange('quality', e.target.value)}
+                        disabled={loading || isGenerating}
                       >
                         <option value="standard">Standard</option>
                         <option value="high">High Quality</option>
                       </select>
                     </div>
+                    
                     <div className="option-group">
-                      <label htmlFor="aspect-ratio">Aspect Ratio</label>
+                      <label>Aspect Ratio</label>
                       <select 
-                        id="aspect-ratio" 
                         value={advancedOptions.aspectRatio}
                         onChange={(e) => handleOptionChange('aspectRatio', e.target.value)}
+                        disabled={loading || isGenerating}
                       >
-                        <option value="1:1">1:1 (Square)</option>
-                        <option value="16:9">16:9 (Wide)</option>
-                        <option value="9:16">9:16 (Portrait)</option>
+                        <option value="1:1">1:1 Square</option>
+                        <option value="16:9">16:9 Wide</option>
+                        <option value="9:16">9:16 Portrait</option>
                       </select>
                     </div>
                   </div>
-                </div>
 
-                {/* Prompt Editor */}
-                <div className="prompt-editor">
-                  <div className="editor-header">
-                    <span>AI Prompt</span>
-                    <button 
-                      className="icon-button" 
-                      onClick={copyToClipboard}
-                      disabled={!prompt || loading || isGenerating}
-                      title="Copy to clipboard"
-                    >
-                      <FiCopy />
-                    </button>
-                  </div>
-                  
-                  <div className="prompt-textarea-container">
-                    <textarea
-                      ref={promptRef}
-                      value={prompt}
-                      onChange={handlePromptChange}
-                      placeholder="AI will generate a prompt based on your image..."
-                      className="prompt-textarea"
-                      disabled={loading || isGenerating}
-                      rows={4}
-                    />
-                    
-                    <div className="prompt-actions">
-                      <button 
-                        className="analyze-btn"
-                        onClick={handleAnalyzeClick}
-                        disabled={!image || loading || isGenerating}
-                      >
-                        <FiRefreshCw className={loading ? 'spinning' : ''} />
-                        {prompt ? 'Regenerate Prompt' : 'Generate Prompt'}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Generate Button */}
-                <div className="generate-btn-container">
                   <button 
                     className={`generate-btn ${isGenerating ? 'loading' : ''}`}
                     onClick={() => handleGenerateImage()}
@@ -392,30 +408,119 @@ const VideoGen = () => {
                   >
                     {isGenerating ? (
                       <>
-                        <FiLoader className="spinning" />
+                        <FiLoader className="spinner" />
                         Generating...
                       </>
                     ) : (
                       <>
-                        <FiZap />
+                        <FiZap className="icon" />
                         Generate Image
                       </>
                     )}
                   </button>
+
+                  <button 
+                    className={`generate-btn video-btn ${(!image || isGeneratingVideo) ? 'disabled' : ''} ${isGeneratingVideo ? 'loading' : ''}`}
+                    onClick={handleGenerateVideo}
+                    disabled={isGenerating || isGeneratingVideo || !image}
+                  >
+                    {isGeneratingVideo ? (
+                      <>
+                        <FiLoader className="spinner" />
+                        Generating Video...
+                      </>
+                    ) : (
+                      <>
+                        <FiVideo className="icon" />
+                        Generate Video
+                      </>
+                    )}
+                  </button>
+
+                  {isGeneratingVideo && (
+                    <div className="buffering-container">
+                      <div className="buffering-dots">
+                        <div className="buffering-dot"></div>
+                        <div className="buffering-dot"></div>
+                        <div className="buffering-dot"></div>
+                      </div>
+                      <div className="buffering-text">Processing your video...</div>
+                    </div>
+                  )}
+
+                  {showVideoError && (
+                    <div className="status-message error">
+                      {videoError}
+                    </div>
+                  )}
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Panel - Results */}
+          <div className="result-panel">
+            <div className="card-ui">
+              <div className="result-content">
+                {generatedImage ? (
+                  <div className="generated-image-container">
+                    <div className="image-preview-wrapper">
+                      <img 
+                        src={generatedImage} 
+                        alt="Generated content" 
+                        className="generated-image"
+                      />
+                      <div className="image-actions">
+                        <button 
+                          className="action-btn download-btn"
+                          onClick={downloadImage}
+                          title="Download image"
+                        >
+                          <FiDownload size={18} /> Download
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="empty-state">
+                    <FiImage size={48} className="empty-icon" />
+                    <p>Your AI-generated image will appear here</p>
+                    <p className="small">Upload an image and click 'Generate' to get started</p>
+                  </div>
+                )}
+                
+                {(loading || isGenerating) && (
+                  <div className="loading-overlay">
+                    <div className="spinner"></div>
+                    <p>{isGenerating ? 'Generating your image...' : 'Analyzing image...'}</p>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* History Panel */}
             {history.length > 0 && (
               <div className="history-panel">
-                <h3>Recent Generations</h3>
+                <div className="history-header">
+                  <h3>Recent Generations</h3>
+                  <button 
+                    className="clear-history"
+                    onClick={() => setHistory([])}
+                    disabled={loading || isGenerating}
+                  >
+                    Clear All
+                  </button>
+                </div>
                 <div className="history-grid">
                   {history.map((item) => (
-                    <div key={item.id} className="history-item" onClick={() => setGeneratedImage(item.image)}>
+                    <div 
+                      key={item.id} 
+                      className={`history-item ${generatedImage === item.image ? 'active' : ''}`} 
+                      onClick={() => setGeneratedImage(item.image)}
+                    >
                       <img src={item.image} alt={item.prompt.substring(0, 30)} />
                       <div className="history-overlay">
-                        <span>{item.prompt.substring(0, 50)}...</span>
+                        <span>{item.prompt.substring(0, 40)}...</span>
                       </div>
                     </div>
                   ))}
@@ -423,60 +528,14 @@ const VideoGen = () => {
               </div>
             )}
           </div>
-
-          {/* Right Column - Result Section */}
-          <div className="result-section">
-            <div className="card-ui">
-              <h2 className="card-title">
-                <FiImage className="icon" /> Generated Result
-              </h2>
-              
-              <div className="card-content">
-                <div className="result-content">
-                  {generatedImage ? (
-                    <div className="generated-image-container">
-                      <div className="image-preview-wrapper">
-                        <img 
-                          src={generatedImage} 
-                          alt="Generated content" 
-                          className="generated-image"
-                        />
-                      </div>
-                      <div className="image-actions">
-                        <button 
-                          className="action-btn download-btn"
-                          onClick={downloadImage}
-                          title="Download image"
-                        >
-                          <FiDownload /> Download Image
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="empty-state">
-                      <FiImage size={48} className="empty-icon" />
-                      <p>Your AI-generated image will appear here</p>
-                      <p className="small">Upload an image and click 'Generate' to get started</p>
-                    </div>
-                  )}
-                  
-                  {(loading || isGenerating) && (
-                    <div className="loading-overlay">
-                      <div className="spinner"></div>
-                      <p>{isGenerating ? 'Generating your image...' : 'Analyzing image...'}</p>
-                    </div>
-                  )}
-                </div>
-                
-                {(status || error) && (
-                  <div className={`status-message ${error ? 'error' : 'success'}`}>
-                    {error || status}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
         </div>
+
+        {/* Status Messages */}
+        {(status || error) && (
+          <div className={`status-message ${error ? 'error' : 'success'}`}>
+            {error || status}
+          </div>
+        )}
       </main>
     </div>
   );

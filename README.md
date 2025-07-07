@@ -1,8 +1,8 @@
-# Future AI - AI-Powered Image Generation Platform
+# Motion AI - AI-Powered Image Generation Platform
 
 A modern web application that leverages OpenAI's DALL-E API to generate stunning images from text prompts or enhance existing images with AI. Built with React, Node.js, and Express.
 
-![Future AI Demo](https://via.placeholder.com/1200x600/0a0618/ffffff?text=Future+AI+Demo)
+![Motion AI Demo](https://via.placeholder.com/1200x600/0a0618/ffffff?text=Motion+AI+Demo)
 
 ## 🌟 Features
 
